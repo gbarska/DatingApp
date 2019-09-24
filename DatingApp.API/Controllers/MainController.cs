@@ -2,32 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DatingApp.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.UI.Controller
 {
-     [Route("api/[controller]")]
-     [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
 
-     //the ControllerBase doesn't offer view support it's perfect for API only 
+    //the ControllerBase doesn't offer view support it's perfect for API only 
     public class MainController : ControllerBase
     {
-         
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        private readonly AppDbContext _context;
+        public MainController(AppDbContext context)
         {
-            return Ok();
+            this._context = context;
+
         }
-        [HttpPost]
-        public IActionResult Create()
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return Ok();  
+            var values = await _context.Values.FirstOrDefaultAsync(x => x.Id == id);
+            return Ok(values);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create()
+        {
+            var values = await _context.Values.ToArrayAsync();
+            return Ok(values);
         }
 
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            return Ok();
+            var values = await _context.Values.ToListAsync();
+            return Ok(values);
         }
 
         [HttpDelete("{id}")]
@@ -41,6 +55,6 @@ namespace DatingApp.UI.Controller
         {
             return Ok();
         }
-    
+
     }
 }

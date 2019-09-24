@@ -1,10 +1,12 @@
-﻿using System;
+﻿using System.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.Data;
 using DatingApp.Data.Repositories;
 using DatingApp.Domain.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.UI
 {
@@ -32,6 +34,18 @@ namespace DatingApp.UI
             services.AddCors();
             services.AddMvc();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(
+                    options => {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                                .GetBytes(Configuration.GetSection("AppSettings:Token").Value))
+                        };
+                    }
+                );
 
              services.AddSwaggerGen(x =>
             {
@@ -49,6 +63,7 @@ namespace DatingApp.UI
             }
 
             app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
             app.UseMvc();
 
             app.UseSwagger();
