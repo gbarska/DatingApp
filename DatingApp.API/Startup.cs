@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.Data;
+using DatingApp.Data.Repositories;
+using DatingApp.Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,7 @@ namespace DatingApp.UI
             services.AddDbContext<AppDbContext>(x=>x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
             services.AddMvc();
+            services.AddScoped<IAuthRepository, AuthRepository>();
 
              services.AddSwaggerGen(x =>
             {
@@ -45,6 +48,7 @@ namespace DatingApp.UI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
 
             app.UseSwagger();
