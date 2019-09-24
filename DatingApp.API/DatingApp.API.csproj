@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>79a3edd0-2092-40a2-a04d-dcb46d5ca99d</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
@@ -15,5 +16,6 @@
     <ProjectReference Include="..\DatingApp.Domain\DatingApp.Domain.csproj" />
     <ProjectReference Include="..\DatingApp.Data\DatingApp.Data.csproj" />
   </ItemGroup>
+  
   
 </Project>
