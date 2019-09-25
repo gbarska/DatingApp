@@ -3,19 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Post } from './post.model';
 import { Subscription } from 'rxjs';
+import { AuthService } from './_services/auth.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
+  jwtHelper = new JwtHelperService();
   
-  loadedPosts : Post[] = [];
-  isFetching = false;
-  error = null;
-  subs: Subscription;
-  constructor(private http: HttpClient) {}
+  ngOnInit() {
+    const token = localStorage.getItem('token');
+    if(token){
+      this.authService.decodedToken = this.jwtHelper.decodeToken(token);
+    }
+  }
+  
+constructor(private http: HttpClient, private authService: AuthService) {}
 
 
   

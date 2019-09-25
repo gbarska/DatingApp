@@ -36,7 +36,7 @@ namespace DatingApp.UI.Controller
             var values = await _context.Values.ToArrayAsync();
             return Ok(values);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> List()
         {
