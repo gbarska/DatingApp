@@ -18,7 +18,7 @@ namespace DatingApp.Data.Repositories
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
             
-            if(username == null)
+            if(user == null)
                 return null;
             if (!AuthService.VerifyPasswordHash(password, user.PasswordHash, user.PassswordSalt))
             return null;

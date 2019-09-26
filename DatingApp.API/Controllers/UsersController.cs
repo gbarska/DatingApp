@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,6 @@ namespace DatingApp.API.Controllers
 
         }
 
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -34,7 +34,6 @@ namespace DatingApp.API.Controllers
             return Ok(userToReturn);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> List()
         {
@@ -56,11 +55,20 @@ namespace DatingApp.API.Controllers
         //     return Ok();
         // }
 
-        // [HttpPut("{id}")]
-        // public IActionResult Update(int id)
-        // {
-        //     return Ok();
-        // }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UserForUpdateDTO user)
+        {
+            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+                var userFromRepo = await _repo.GetUser(id);
+
+                _mapper.Map(user, userFromRepo);
+                if(await _repo.SaveAll())
+                    return NoContent();
+
+                throw new Exception($"Updating user {id} failed on save");
+        }
 
 
     }
