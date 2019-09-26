@@ -1,9 +1,5 @@
 ﻿using System.Net;
 using System.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DatingApp.Data;
 using DatingApp.Data.Repositories;
 using DatingApp.Domain.Interfaces;
@@ -18,6 +14,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using DatingApp.API.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace DatingApp.UI
 {
@@ -35,8 +34,16 @@ namespace DatingApp.UI
             
             services.AddDbContext<AppDbContext>(x=>x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
-            services.AddMvc();
+
+            services.AddAutoMapper(typeof(MappingsProfiles));
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling = 
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
