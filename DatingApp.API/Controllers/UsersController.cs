@@ -9,9 +9,12 @@ using DatingApp.Domain.Interfaces;
 using DatingApp.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DatingApp.API.Helpers;
+using DatingApp.Domain.Services;
 
 namespace DatingApp.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -35,11 +38,15 @@ namespace DatingApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List([FromQuery]UserParams userParams)
         {
-          var values = await _repo.GetUsers();
+          var users = await _repo.GetUsers(userParams);
                
-            var usersToReturn = _mapper.Map<IEnumerable<UserForListDTO>>(values);
+            var usersToReturn = _mapper.Map<IEnumerable<UserForListDTO>>(users);
+
+            Response.AddPagination(users.CurrentPage, users.PageSize, 
+            users.TotalCount, users.TotalPages);
+
             return Ok(usersToReturn);
         }
 
@@ -69,6 +76,35 @@ namespace DatingApp.API.Controllers
 
                 throw new Exception($"Updating user {id} failed on save");
         }
+
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser(int id, int recipientId)
+        {
+            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var like = await _repo.GetLike(id,recipientId);
+
+            if (like != null)
+                return BadRequest("You already like the user");
+
+            if( await _repo.GetUser(recipientId) == null)
+                return NotFound();
+            
+            like = new Like
+            {
+                LikerId = id,
+                LikeeId = recipientId
+            };
+
+            _repo.Add<Like>(like);
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            throw new Exception("Failed to like user");
+        }
+
 
 
     }

@@ -2,7 +2,7 @@ import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angu
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, PaginationModule } from 'ngx-bootstrap';
 import { AppComponent } from './app.component';
 // import { AuthInterceptorService } from './auth-interceptor.service';
 // import { LoggingInterceptorService } from './logging-interceptor.service';
@@ -28,6 +28,7 @@ import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { TimeAgoPipe } from 'time-ago-pipe'
 
 export function tokenGetter(){
    return localStorage.getItem('token');
@@ -51,7 +52,8 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MessagesComponent,
       MemberCardComponent,
       MemberDetailComponent,
-      MemberEditComponent
+      MemberEditComponent,
+      TimeAgoPipe
    ],
    imports: [
       BrowserModule,
@@ -59,6 +61,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       HttpClientModule,
       FormsModule,
       BsDropdownModule.forRoot(),
+      PaginationModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       JwtModule.forRoot({
          config: {

@@ -58,7 +58,7 @@ namespace DatingApp.UI
                         };
                     }
                 );
-
+             services.AddScoped<LogUserActivity>();
              services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("V1", new Info { Title = "Projeto API com Dapper", Version = "V1" });

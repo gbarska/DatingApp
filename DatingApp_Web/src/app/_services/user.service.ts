@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { User } from '../_models/user';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { PaginatedResult } from '../_models/pagination';
 
 
 // const httpOptions = {
@@ -20,15 +21,34 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-list(): Observable<User[]> {
-  return this.http.get<User[]>(this.baseUrl);
+list(page?, itemsPerPage?): Observable<PaginatedResult<User[]>> {
+  const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
+
+  let params = new HttpParams();
+
+  if(page != null && itemsPerPage != null){
+    params = params.append('pageNumber', page);
+    params = params.append('pageSize', itemsPerPage);
+  }
+
+  return this.http.get<User[]>(this.baseUrl,{ observe: 'response', params})
+    .pipe(
+      map(response => {
+      paginatedResult.result = response.body;
+
+      if ( response.headers.get('Pagination') != null) {
+        paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+      }
+      return paginatedResult;
+    })
+    );
   //sending token manually
   // return this.http.get<User[]>(this.baseUrl, httpOptions);
 }
 
 get(id:number): Observable<User> {
-  console.log('Fetching user: '+id);
-  return this.http.get<User>(this.baseUrl + '/' + id).pipe(map( data => {
+  console.log('Fetching user: '+ id);
+  return this.http.get<User>(this.baseUrl + '/' + id).pipe(tap( data => {
   console.log(data);
   return data;
   })

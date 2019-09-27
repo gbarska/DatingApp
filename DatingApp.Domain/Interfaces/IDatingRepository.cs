@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.Domain.Models;
+using DatingApp.Domain.Services;
 
 namespace  DatingApp.Domain.Interfaces
 {
@@ -9,7 +10,8 @@ namespace  DatingApp.Domain.Interfaces
          void Add<T>(T entity) where T: class;
          void Delete<T>(T entity) where T: class;
          Task<bool> SaveAll();
-         Task<IEnumerable<User>> GetUsers();
+         Task<PagedList<User>> GetUsers(UserParams userParams);
          Task<User> GetUser(int id);
+         Task<Like> GetLike(int userId, int recipientId);
     }
 }
