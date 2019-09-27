@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.Domain.Models;
 using DatingApp.Domain.Services;
+using DatingApp.Domain.DTOs;
 
 namespace  DatingApp.Domain.Interfaces
 {

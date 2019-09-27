@@ -22,7 +22,8 @@ login(model: any) {
       const user = response;
       if (user) {
         localStorage.setItem('token', user.token);
-        localStorage.setItem('user', JSON.stringify(user.user));
+        console.log(user.userData);
+        localStorage.setItem('user', JSON.stringify(user.userData));
         this.currentUser = user.userData;
         this.decodedToken = this.jwtHelper.decodeToken(user.token);
       }
