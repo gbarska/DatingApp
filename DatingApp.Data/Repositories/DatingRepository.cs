@@ -55,6 +55,16 @@ namespace DatingApp.Data.Repositories
                 var maxDateOfBirth = DateTime.Today.AddYears(-userParams.MinAge);
 
                 users = users.Where(u => u.DateOfBirth >= minDateOfBirth && u.DateOfBirth <= maxDateOfBirth);
+             }
+
+            if (userParams.Likees){
+                var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                users = users.Where(u => userLikers.Contains(u.Id));
+            }
+
+            if (userParams.Likers){
+                var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
+                users = users.Where(u => userLikees.Contains(u.Id));
             }
             
             if(!string.IsNullOrEmpty(userParams.OrderBy))
@@ -72,11 +82,32 @@ namespace DatingApp.Data.Repositories
 
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int userId, bool likers)
+        {
+               var user = await _context.Users
+               .Include(x => x.Likers)
+               .Include(u => u.Likees)
+               .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if(likers)
+            {
+                return user.Likers.Where(u => u.LikeeId == userId ).Select(i => i.LikerId);
+            } 
+            else
+            {
+                return user.Likees.Where(u => u.LikerId == userId ).Select(i => i.LikeeId);
+            }    
+        }
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0; 
         }
 
-      
+        public async Task<Photo> GetPhoto(int id)
+        {
+          var photo = await _context.Photos.FirstOrDefaultAsync( x => x.Id == id);
+          return photo;
+        }
     }
 }

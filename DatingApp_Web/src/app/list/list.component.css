@@ -1,0 +1,11 @@
+.bg-primary, .btn-primary{
+    background-color: #8601af;
+}
+
+.bg-wisteria{
+    background-color: #9B59B6;
+}
+
+.bg-wisteria:active, .bg-wisteria:visited{
+    background-color: #5B3256;
+}

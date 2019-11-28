@@ -34,3 +34,11 @@
 .animate{
     transition: all 0.3s ease-in-out;
 }
+#titulo{
+    font-family: 'Mansalva', cursive;
+}
+
+.avatar{
+    border-radius: 50%;
+    border: 0px;
+}

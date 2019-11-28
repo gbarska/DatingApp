@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
     if (this.input.nativeElement.value == this.model.password){
       this.authService.register(this.model).subscribe(() => {
         this.alertify.success("Registration successful");
+        this.cancelRegister.emit(false);
       }, error => {
         this.alertify.error(error);
       });

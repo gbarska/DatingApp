@@ -2,7 +2,7 @@ import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angu
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BsDropdownModule, TabsModule, PaginationModule, ButtonsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, PaginationModule, ButtonsModule, ModalModule } from 'ngx-bootstrap';
 import { AppComponent } from './app.component';
 // import { AuthInterceptorService } from './auth-interceptor.service';
 // import { LoggingInterceptorService } from './logging-interceptor.service';
@@ -26,9 +26,13 @@ import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { UserService } from './_services/user.service';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { ListsResolver } from './_resolvers/lists.resolver';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { TimeAgoPipe } from 'time-ago-pipe'
+import { ModalComponent } from './modal/modal.component';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 export function tokenGetter(){
    return localStorage.getItem('token');
@@ -53,16 +57,20 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
-      TimeAgoPipe
+      TimeAgoPipe,
+      ModalComponent,
+      PhotoEditorComponent
    ],
    imports: [
       BrowserModule,
       FormsModule,
       HttpClientModule,
+      FileUploadModule,
       FormsModule,
       BsDropdownModule.forRoot(),
       PaginationModule.forRoot(),
       ButtonsModule.forRoot(),
+      ModalModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       JwtModule.forRoot({
          config: {
@@ -82,6 +90,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       UserService,
       MemberDetailResolver,
       MemberListResolver,
+      ListsResolver,
       MemberEditResolver,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
       PreventUnsavedChanges

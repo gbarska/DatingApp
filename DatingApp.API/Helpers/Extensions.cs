@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using DatingApp.Domain.Services;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace DatingApp.API.Helpers
 {
@@ -23,6 +24,18 @@ namespace DatingApp.API.Helpers
             response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
 
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+            response.Headers.Add("Access-Control-Allow-Origin","*");
+        }
+
+         public static void AddLikers(this HttpResponse response,bool match)
+        {
+
+            var likersHeader = new LikersHeader(match);
+            var camelCaseFormatter = new JsonSerializerSettings();
+             camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver(); 
+            response.Headers.Add("Likers", JsonConvert.SerializeObject(likersHeader, camelCaseFormatter));
+
+            response.Headers.Add("Access-Control-Expose-Headers", "Likers");
             response.Headers.Add("Access-Control-Allow-Origin","*");
         }
         public static int CalculateAge(this DateTime theDateTime)

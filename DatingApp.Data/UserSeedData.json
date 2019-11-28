@@ -107,7 +107,7 @@
  ,
     {
       "Username": "Ola",
-      "Gender": "male",
+      "Gender": "female",
       "DateOfBirth": "1961-02-25",
       "Password": "password",
       "KnownAs": "Ola",
@@ -127,29 +127,8 @@
       ]
     },
     {
-      "Username": "Billie",
-      "Gender": "male",
-      "DateOfBirth": "1974-11-23",
-      "Password": "password",
-      "KnownAs": "Billie",
-      "Created": "2017-06-27",
-      "LastActive": "2017-06-27",
-      "Introduction": "Ullamco magna culpa sunt proident in commodo ut minim. Incididunt officia tempor dolor cupidatat velit eiusmod incididunt dolor. Voluptate veniam esse sunt exercitation amet sint enim.\r\n",
-      "LookingFor": "Officia exercitation qui aliqua velit voluptate labore ut consectetur occaecat aute eiusmod. Exercitation enim ea quis eu eu velit magna quis id. Eiusmod est ea elit officia esse. Qui exercitation exercitation Lorem aliqua ex exercitation amet ad mollit. Aute occaecat pariatur adipisicing enim excepteur esse nostrud nulla occaecat eiusmod ad. Ullamco aute cupidatat veniam Lorem sunt eu qui ea nostrud. Amet qui ad cillum et velit occaecat ea.\r\n",
-      "Interests": "Consequat sit occaecat voluptate nostrud excepteur magna culpa labore dolore.",
-      "City": "Kingstowne",
-      "Country": "Philippines",
-      "Photos": [
-        {
-          "url": "https://randomuser.me/api/portraits/women/35.jpg",
-          "isMain": true,
-          "description": "Fugiat et exercitation eiusmod laborum eiusmod adipisicing esse deserunt reprehenderit officia deserunt tempor nisi."
-        }
-      ]
-    },
-    {
       "Username": "Madeleine",
-      "Gender": "male",
+      "Gender": "female",
       "DateOfBirth": "1972-01-29",
       "Password": "password",
       "KnownAs": "Madeleine",
@@ -170,7 +149,7 @@
     },
     {
       "Username": "Natalia",
-      "Gender": "male",
+      "Gender": "female",
       "DateOfBirth": "1998-05-29",
       "Password": "password",
       "KnownAs": "Natalia",
@@ -191,7 +170,7 @@
     },
     {
       "Username": "Vilma",
-      "Gender": "male",
+      "Gender": "female",
       "DateOfBirth": "1963-07-03",
       "Password": "password",
       "KnownAs": "Vilma",

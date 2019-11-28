@@ -21,7 +21,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-list(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>> {
+list(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedResult<User[]>> {
   const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
   let params = new HttpParams();
@@ -38,6 +38,13 @@ list(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>> {
     params = params.append('orderBy', userParams.orderBy);
   }
   
+  if (likesParams === 'Likers'){
+    params = params.append('likers', 'true');
+  }
+  if (likesParams === 'Likees'){
+    params = params.append('likees', 'true');
+  }
+
   return this.http.get<User[]>(this.baseUrl,{ observe: 'response', params})
     .pipe(
       map(response => {
@@ -65,6 +72,11 @@ get(id:number): Observable<User> {
 
 update(id: number, user: User){
   return this.http.put(this.baseUrl + '/' + id, user);
+}
+
+sendLike(id: number, recipientId: number) {
+  //observe property: changes the type of response that http modules will give back to us
+  return this.http.post(this.baseUrl + '/' + id + '/like/' + recipientId, {},{observe: 'response'} );
 }
 
 }

@@ -34,6 +34,7 @@ namespace DatingApp.UI
             
             services.AddDbContext<AppDbContext>(x=>x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddAutoMapper(typeof(MappingsProfiles));
 
