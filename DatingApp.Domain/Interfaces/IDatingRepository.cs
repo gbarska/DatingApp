@@ -15,5 +15,6 @@ namespace  DatingApp.Domain.Interfaces
          Task<User> GetUser(int id);
          Task<Like> GetLike(int userId, int recipientId);
          Task<Photo> GetPhoto(int Id);
+         Task<Photo> GetMainPhotoForUser(int id);
     }
 }

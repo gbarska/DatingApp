@@ -61,9 +61,9 @@ list(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedResul
 }
 
 get(id:number): Observable<User> {
-  console.log('Fetching user: '+ id);
+  // console.log('Fetching user: '+ id);
   return this.http.get<User>(this.baseUrl + '/' + id).pipe(tap( data => {
-  console.log(data);
+  // console.log(data);
   return data;
   })
   );
@@ -77,6 +77,15 @@ update(id: number, user: User){
 sendLike(id: number, recipientId: number) {
   //observe property: changes the type of response that http modules will give back to us
   return this.http.post(this.baseUrl + '/' + id + '/like/' + recipientId, {},{observe: 'response'} );
+}
+
+
+setMainPhoto(userId: number, id: number){
+  return this.http.post(this.baseUrl + '/' + userId + '/photos/' + id +'/setMain',{});
+}
+
+deletePhoto(userId: number, id: number){
+  return this.http.delete(this.baseUrl + '/'+ userId + '/photos/' + id);
 }
 
 }

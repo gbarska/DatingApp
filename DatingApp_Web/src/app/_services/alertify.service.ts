@@ -16,6 +16,18 @@ confirm(message: string, okCallback: ()=> any){
   });
 }
 
+confirmWithTitle(title: string, message: string, okCallback: () => any) {
+  alertify.confirm(title, message, ( e: any) => {
+    if ( e ) {
+      console.log(e);
+      okCallback();
+    }
+    // else{
+    // }
+  }, (f : any ) => {}
+  );
+}
+
 success(message: string){
   alertify.success(message);
 }
