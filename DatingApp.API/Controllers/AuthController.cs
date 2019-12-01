@@ -1,14 +1,10 @@
-using System;
-using System.Text;
-using System.Security.Claims;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using DatingApp.Domain.DTOs;
+using DatingApp.API.DTOs;
 using DatingApp.Domain.Interfaces;
 using DatingApp.Domain.Models;
+using DatingApp.Domain.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using DatingApp.Domain.Services;
 using AutoMapper;
 // using Microsoft.IdentityModel.Tokens;
 // using System.IdentityModel.Tokens.Jwt;
@@ -43,14 +39,16 @@ namespace DatingApp.API.Controllers
             if (await _repo.UserExists(user.Username))
                 return BadRequest("Username already exists");
 
-            var userToCreate = new User
-            {
-                Username = user.Username
-            };
+            // var userToCreate = new User
+            // {
+            //     Username = user.Username
+            // };
+
+            var userToCreate = _mapper.Map<User>(user);
 
             var createdUser = await _repo.Register(userToCreate, user.Password);
-
-            return StatusCode(201);
+            var userToReturn = _mapper.Map<UserForDetailedDTO>(createdUser);
+            return CreatedAtRoute("GetUser", new {controller = "Users", id = createdUser.Id},userToReturn );
         }
 
         [HttpPost("login")]

@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
-namespace DatingApp.UI
+namespace DatingApp.API
 {
     public class Startup
     {

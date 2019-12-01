@@ -1,4 +1,4 @@
-namespace DatingApp.Domain.DTOs
+namespace DatingApp.Domain.Shared
 {
     public class UserParams
     {

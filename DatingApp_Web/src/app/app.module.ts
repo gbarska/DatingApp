@@ -1,8 +1,9 @@
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BsDropdownModule, TabsModule, PaginationModule, ButtonsModule, ModalModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, PaginationModule, ButtonsModule, ModalModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { AppComponent } from './app.component';
 // import { AuthInterceptorService } from './auth-interceptor.service';
 // import { LoggingInterceptorService } from './logging-interceptor.service';
@@ -64,6 +65,8 @@ export class CustomHammerConfig extends HammerGestureConfig{
    imports: [
       BrowserModule,
       FormsModule,
+      BrowserAnimationsModule,
+      ReactiveFormsModule,
       HttpClientModule,
       FileUploadModule,
       FormsModule,
@@ -72,6 +75,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       ButtonsModule.forRoot(),
       ModalModule.forRoot(),
       RouterModule.forRoot(appRoutes),
+      BsDatepickerModule.forRoot(),
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,

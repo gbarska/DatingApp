@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using DatingApp.Domain.DTOs;
+using DatingApp.API.DTOs;
 using System.Security.Claims;
 using CloudinaryDotNet.Actions;
 using DatingApp.Domain.Models;
 
-namespace DatingApp.UI.Controller
+namespace DatingApp.API.Controller
 {
     [Authorize]
     [Route("api/users/{userId}/photos")]

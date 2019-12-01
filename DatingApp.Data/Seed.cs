@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DatingApp.Domain.Models;
-using DatingApp.Domain.Services;
+using DatingApp.Domain.Shared;
 using Newtonsoft.Json;
 
 namespace DatingApp.Data

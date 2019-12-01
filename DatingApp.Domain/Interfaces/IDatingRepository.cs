@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.Domain.Models;
-using DatingApp.Domain.Services;
-using DatingApp.Domain.DTOs;
+using DatingApp.Domain.Shared;
 
 namespace  DatingApp.Domain.Interfaces
 {

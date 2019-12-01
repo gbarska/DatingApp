@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using DatingApp.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Domain.Interfaces;
-using DatingApp.Domain.Services;
-using DatingApp.Domain.DTOs;
+using DatingApp.Domain.Shared;
 using System.Linq;
 
 namespace DatingApp.Data.Repositories

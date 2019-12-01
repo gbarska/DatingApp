@@ -1,10 +1,3 @@
-using System;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using DatingApp.Domain.Services;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
-
 namespace DatingApp.API.Helpers
 {
     public class CloudinarySettings

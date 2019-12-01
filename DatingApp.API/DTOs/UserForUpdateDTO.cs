@@ -1,7 +1,7 @@
 using System;
 using DatingApp.Domain.Models;
 
-namespace DatingApp.Domain.DTOs
+namespace DatingApp.API.DTOs
 {
     public class UserForUpdateDTO
     {

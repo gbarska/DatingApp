@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using DatingApp.Domain.DTOs;
+using DatingApp.API.DTOs;
+using DatingApp.Domain.Shared;
 using DatingApp.Domain.Interfaces;
 using DatingApp.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,7 @@ namespace DatingApp.API.Controllers
 
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> Get(int id)
         {
             var user = await _repo.GetUser(id);
