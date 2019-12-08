@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ChatService } from 'src/app/_services/chat.service';
 
 @Component({
   selector: 'app-member-card',
@@ -18,7 +19,7 @@ export class MemberCardComponent implements OnInit {
 
   constructor(public authService: AuthService, 
     private userService: UserService, private alertify: AlertifyService,
-    private modalService: BsModalService) { }
+    private modalService: BsModalService, private chatService: ChatService) { }
 
   ngOnInit() {
   }
@@ -45,5 +46,15 @@ export class MemberCardComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }
+
+  openChat(){
+    this.chatService.setRecipientId(this.user);
+    this.chatService.show();
+  }
+  onSendMessage()
+  {
+    this.modalRef.hide();
+    this.openChat();
   }
 }

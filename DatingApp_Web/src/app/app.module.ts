@@ -34,6 +34,10 @@ import { TimeAgoPipe } from 'time-ago-pipe'
 import { ModalComponent } from './modal/modal.component';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { MessagesResolver } from './_resolvers/messages.resolver';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { ChatComponent } from './chat/chat.component';
+import { ChatService } from './_services/chat.service';
 
 export function tokenGetter(){
    return localStorage.getItem('token');
@@ -60,7 +64,9 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberEditComponent,
       TimeAgoPipe,
       ModalComponent,
-      PhotoEditorComponent
+      PhotoEditorComponent,
+      MemberMessagesComponent,
+      ChatComponent
    ],
    imports: [
       BrowserModule,
@@ -86,7 +92,7 @@ export class CustomHammerConfig extends HammerGestureConfig{
       TabsModule.forRoot(),
       NgxGalleryModule
    ],
-   providers: [
+      providers: [
       AuthService,
       ErrorInterceptorProvider,
       AlertifyService,
@@ -95,9 +101,11 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberDetailResolver,
       MemberListResolver,
       ListsResolver,
+      MessagesResolver,
       MemberEditResolver,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
-      PreventUnsavedChanges
+      PreventUnsavedChanges,
+      ChatService
       ],
    bootstrap: [
       AppComponent

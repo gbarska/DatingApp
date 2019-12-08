@@ -6,6 +6,11 @@
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
 
+
+.btn-primary:hover{
+  background-color: #cf9bdf;
+}
+
 .bg-magenta{
     background-color: #8601af;
 }

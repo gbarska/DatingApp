@@ -32,7 +32,7 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<AppDbContext>(x=>x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
             services.AddCors();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
