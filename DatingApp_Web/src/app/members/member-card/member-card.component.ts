@@ -14,7 +14,7 @@ import { ChatService } from 'src/app/_services/chat.service';
 export class MemberCardComponent implements OnInit {
   @Input() user: User;
   modalRef: BsModalRef;
-  @ViewChild('template') template; 
+  @ViewChild('template', {static: true}) template; 
 
 
   constructor(public authService: AuthService, 

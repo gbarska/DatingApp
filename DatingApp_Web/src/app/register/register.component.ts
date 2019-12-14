@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   // @Input() valuesFromHome: any;
   @Output() cancelRegister = new EventEmitter();
-  @ViewChild('confirmPassword') input;
+  @ViewChild('confirmPassword', {static: true}) input;
   registerForm: FormGroup;
 
   constructor(private authService: AuthService, private alertify: AlertifyService, private fb: FormBuilder, private router: Router) { }

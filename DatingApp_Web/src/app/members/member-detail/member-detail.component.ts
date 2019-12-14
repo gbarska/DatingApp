@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 import { TabsetComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { AuthService } from 'src/app/_services/auth.service';
+import { ChatService } from 'src/app/_services/chat.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -17,11 +18,12 @@ export class MemberDetailComponent implements OnInit {
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
   modalRef: BsModalRef;
-  @ViewChild('memberTabs') memberTabs: TabsetComponent;
-  @ViewChild('template') template;
+  // @ViewChild('memberTabs') memberTabs: TabsetComponent;
+  @ViewChild('template', {static: true}) template;
 
   constructor(private userService: UserService, private alertify: AlertifyService,
-    private modalService: BsModalService, private route: ActivatedRoute, public authService: AuthService) { }
+    private modalService: BsModalService, private route: ActivatedRoute, public authService: AuthService,
+     private chatService: ChatService) { }
 
   ngOnInit() {
     // this.loadUser();
@@ -29,10 +31,10 @@ export class MemberDetailComponent implements OnInit {
       this.user = data['user'];
     });
 
-    this.route.queryParams.subscribe( params => {
-      const selectTab = params['tab'];
-      this.memberTabs.tabs[selectTab > 0 ? selectTab : 0].active = true;
-    })
+    // this.route.queryParams.subscribe( params => {
+    //   const selectTab = params['tab'];
+    //   this.memberTabs.tabs[selectTab > 0 ? selectTab : 0].active = true;
+    // })
 
     this.galleryOptions = [
       {
@@ -63,9 +65,9 @@ export class MemberDetailComponent implements OnInit {
     return imageUrls;
   }
 
-  selectTab(tabId: number){
-    this.memberTabs.tabs[tabId].active = true;
-  }
+  // selectTab(tabId: number){
+  //   this.memberTabs.tabs[tabId].active = true;
+  // }
   // loadUser(){
   //   this.userService.get(+this.route.snapshot.params['id']).subscribe((user: User) =>{
   //     this.user = user;
@@ -93,5 +95,14 @@ export class MemberDetailComponent implements OnInit {
       this.alertify.error(error);
     })
 
+  }
+
+  openChat(){
+
+    if (this.modalRef)
+      this.modalRef.hide();
+      
+    this.chatService.setRecipientId(this.user);
+    this.chatService.show();
   }
 }

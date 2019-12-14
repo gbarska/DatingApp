@@ -8,6 +8,12 @@
       <div class="card">
         <img class="card-img-top img-thumbnail" src="{{user?.photoUrl || '../../../../../assets/img/user.png'}}" alt="{{user.knownAs}}">
         <div class="card-body">
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                  <button class="btn bg-magenta w-100 text-light" (click)="sendLike(user.id)">Like</button>
+                  <button class="btn btn-info w-100 text-light" (click)="openChat(user)">Message</button>
+                </div>
+              </div>
             <div>
               <strong>Location:</strong>
               <p>{{user?.city}}, {{user?.country}}</p>
@@ -22,12 +28,12 @@
             </div>
             <div>
               <strong>Member since:</strong>
-              <p>{{user?.createdAt | date: 'mediumDate'}}</p>
+              <p>{{user?.createdAt}}</p>
             </div>
            <div class="card-footer">
              <div class="btn-group d-flex">
                <button class="btn bg-magenta w-100 text-light" (click)="sendLike(user.id)">Like</button>
-               <button class="btn btn-info w-100 text-light" (click)="selectTab(3)">Message</button>
+               <button class="btn btn-info w-100 text-light" (click)="openChat(user)">Message</button>
              </div>
            </div>
           </div>
@@ -49,10 +55,10 @@
           <tab heading="Photos">
             <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
           </tab>
-          <tab heading="Messages">
+          <!-- <tab heading="Messages"> -->
           <!-- <app-member-messages [recipientId]="user.id"></app-member-messages> -->
-          <app-member-messages></app-member-messages>
-          </tab>
+          <!-- <app-member-messages></app-member-messages> -->
+          <!-- </tab> -->
         </tabset>
       </div>
       </div>
@@ -91,7 +97,7 @@
          </div>
          <div class="row">
            <div class="col text-center">
-              <button class="btn btn-primary">Send a Message</button>
+              <button class="btn btn-primary" (click)="openChat()">Send a Message</button>
            </div>
          </div>  
     </div>

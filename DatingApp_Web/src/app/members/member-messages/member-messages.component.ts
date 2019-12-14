@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { Message } from 'src/app/_models/message';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
@@ -6,7 +6,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { tap } from 'rxjs/operators';
 import { ChatService } from 'src/app/_services/chat.service';
-import { Subscribable, Subscriber, Subscription } from 'rxjs';
+import { Subscribable, Subscriber, Subscription, interval } from 'rxjs';
 import { User } from 'src/app/_models/user';
 
 @Component({
@@ -15,11 +15,13 @@ import { User } from 'src/app/_models/user';
   styleUrls: ['./member-messages.component.css']
 })
 export class MemberMessagesComponent implements OnInit {
+
   // @Input() recipientId: number;
   messages: Message[];
   newMessage: any = {};
   subs: Subscription;
   recipient: User;
+  timeSubs: Subscription;
 
   constructor(private userService: UserService, private authService: AuthService,
     private route: ActivatedRoute, private alertify: AlertifyService, private chatService: ChatService ) { }
@@ -27,6 +29,10 @@ export class MemberMessagesComponent implements OnInit {
   ngOnInit() {
     this.subs = this.chatService.recipient.subscribe(next => {
       this.recipient = next;
+      this.loadMessages();
+    });
+
+    this.timeSubs = interval(1500).subscribe( () => {
       this.loadMessages();
     });
     // console.log('recipient id'+ this.recipientId);
@@ -63,6 +69,7 @@ sendMessage(){
 
 ngOnDestroy(): void {
   this.subs.unsubscribe();
- }
+  this.timeSubs.unsubscribe();
+}
 
 }
