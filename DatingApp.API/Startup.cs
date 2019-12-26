@@ -18,6 +18,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
+using DatingApp.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace DatingApp.API
 {
@@ -33,20 +37,19 @@ namespace DatingApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-              services.AddControllers()
-            .AddNewtonsoftJson(opt => {
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 8;
+                opt.Password.RequireNonAlphanumeric= false;
+                opt.Password.RequireUppercase = false;
             });
-            services.AddCors();
 
-            services.AddDbContext<AppDbContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
-            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<AppDbContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
 
-            services.AddAutoMapper(typeof(MappingsProfiles));           
-
-            services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IDatingRepository, DatingRepository>();
-            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
                     options => {
@@ -61,6 +64,34 @@ namespace DatingApp.API
                     }
                 );
 
+            services.AddAuthorization( opt => {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Moderator", "Admin"));
+                opt.AddPolicy("VIPOnly", policy => policy.RequireRole("VIP"));
+            });
+
+            services.AddControllers( opt => {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddNewtonsoftJson(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
+            services.AddCors();
+
+            services.AddDbContext<AppDbContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
+            services.AddAutoMapper(typeof(MappingsProfiles));           
+
+            // services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
+            
+            
             //  services.AddSignalR();   
 
              services.AddScoped<LogUserActivity>();

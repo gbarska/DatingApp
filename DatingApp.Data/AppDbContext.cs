@@ -4,23 +4,63 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore;
 using DatingApp.Domain.Models;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DatingApp.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, 
+    UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
         public AppDbContext(){}
-        public DbSet<Value> Values { get; set; }   
-        public DbSet<User> Users { get; set; }
+        // public DbSet<Value> Values { get; set; }   
+        // public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }         
         public DbSet<Like> Likes { get; set; }         
         public DbSet<Message> Messages { get; set; }         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+           
+           //fix mysql error for key is too long 767byte
+            modelBuilder.Entity<User>().Property(u => u.Id).HasMaxLength(127);
+            modelBuilder.Entity<User>().Property(u => u.NormalizedEmail).HasMaxLength(127);
+            modelBuilder.Entity<User>().Property(u => u.NormalizedUserName).HasMaxLength(127);
+            modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(127);
+            modelBuilder.Entity<User>().Property(u => u.UserName).HasMaxLength(127);
+           
+            modelBuilder.Entity<Role>().Property(u => u.NormalizedName).HasMaxLength(127);
+            modelBuilder.Entity<Role>().Property(u => u.Name).HasMaxLength(127);
+
+            modelBuilder.Entity<UserRole>(u => {
+                u.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                u.HasOne(ur =>  ur.User).WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+                u.HasOne(ur =>  ur.Role).WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+            });
+
+        modelBuilder.Entity<IdentityUserLogin<int>>(entity => 
+        { 
+            entity.HasKey(m => m.UserId);
+            entity.Property(m => m.LoginProvider).HasMaxLength(127); 
+            entity.Property(m => m.ProviderKey).HasMaxLength(127); 
+        }); 
+
+        modelBuilder.Entity<IdentityUserToken<int>>(entity => 
+        { 
+            entity.Property(m => m.UserId).HasMaxLength(127); 
+            entity.Property(m => m.LoginProvider).HasMaxLength(127); 
+            entity.Property(m => m.Name).HasMaxLength(127); 
+        }); 
+
             modelBuilder.Entity<Like>() 
                 .HasKey(k => new {k.LikerId, k.LikeeId});
             modelBuilder.Entity<Like>()

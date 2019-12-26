@@ -18,7 +18,7 @@ using DatingApp.Domain.Models;
 
 namespace DatingApp.API.Controller
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/users/{userId}/photos")]
     [ApiController]
 

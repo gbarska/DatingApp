@@ -36,8 +36,10 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
 import { FileUploadModule } from 'ng2-file-upload';
 import { MessagesResolver } from './_resolvers/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from './_services/chat.service';
+import { HasRoleDirective } from './_directives/hasRole.directive';
 
 export function tokenGetter(){
    return localStorage.getItem('token');
@@ -66,7 +68,9 @@ export class CustomHammerConfig extends HammerGestureConfig{
       ModalComponent,
       PhotoEditorComponent,
       MemberMessagesComponent,
-      ChatComponent
+      ChatComponent,
+      AdminPanelComponent,
+      HasRoleDirective
    ],
    imports: [
       BrowserModule,

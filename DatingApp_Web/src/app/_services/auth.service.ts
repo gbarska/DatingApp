@@ -48,4 +48,22 @@ changeMemberPhoto(photoUrl: string){
   this.photoUrl.next(photoUrl);
 }
 
+roleMatch(allowedRoles: Array<string>): boolean{
+  let isMatch = false
+
+  const userRoles = this.decodedToken.role as Array<string>;
+  console.log(userRoles);
+  console.log(allowedRoles) ;
+
+  allowedRoles.forEach(element => {
+    if (userRoles.includes(element)){
+      isMatch = true;
+      console.log('suceeded');
+      return;
+    }
+  });
+console.log('failed');
+  return isMatch;
+}
+
 }

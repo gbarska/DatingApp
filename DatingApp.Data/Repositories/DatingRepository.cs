@@ -160,5 +160,22 @@ namespace DatingApp.Data.Repositories
 
             return await PagedList<Message>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
         }
+
+        public async Task<IEnumerable<UserForListWithRolesDTO>> GetUsersWithRoles()
+        {
+            var users = await _context.Users
+            .OrderBy(x => x.UserName)
+            .Select(user => new UserForListWithRolesDTO {
+                Id = user.Id,
+                UserName = user.UserName,
+                Roles = (from userRole in user.UserRoles
+                 join role in _context.Roles 
+                 on userRole.RoleId
+                 equals role.Id
+                 select role.Name).ToList()
+            }).ToListAsync();
+
+            return users;
+        }
     }
 }

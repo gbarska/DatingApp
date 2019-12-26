@@ -12,14 +12,18 @@ namespace DatingApp.Domain.Shared
 {
     public static class AuthService
     {
-        public static SecurityToken Generate(User user, IConfiguration config)
+        public static string Generate(User user, IConfiguration config, ICollection<string> roles)
         {
-            
-            var claims = new[]
-          {
+            var claims = new List<Claim>
+            {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.UserName)
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("AppSettings:Token").Value));
 
@@ -34,15 +38,12 @@ namespace DatingApp.Domain.Shared
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            return tokenHandler.CreateToken(tokenDescriptor);
+            return new JwtSecurityTokenHandler().WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }
-
         public static string Write(SecurityToken token)
         {
             return  new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-
         public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passswordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passswordSalt))
@@ -56,7 +57,6 @@ namespace DatingApp.Domain.Shared
             }
             return true;
         }
-
          public static List<byte[]> CreatePasswordHash(string password)
         {
             var lista = new List<byte[]>();
