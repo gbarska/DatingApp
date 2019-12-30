@@ -37,8 +37,12 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { MessagesResolver } from './_resolvers/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { AdminModalComponent } from './admin/admin-modal/admin-modal.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from './_services/chat.service';
+import { AdminService } from './_services/admin.service';
 import { HasRoleDirective } from './_directives/hasRole.directive';
 
 export function tokenGetter(){
@@ -70,7 +74,13 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberMessagesComponent,
       ChatComponent,
       AdminPanelComponent,
-      HasRoleDirective
+      HasRoleDirective,
+      UserManagementComponent,
+      PhotoManagementComponent,
+      AdminModalComponent
+   ],
+   entryComponents:[
+      AdminModalComponent
    ],
    imports: [
       BrowserModule,
@@ -109,7 +119,8 @@ export class CustomHammerConfig extends HammerGestureConfig{
       MemberEditResolver,
       {provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig },
       PreventUnsavedChanges,
-      ChatService
+      ChatService,
+      AdminService
       ],
    bootstrap: [
       AppComponent

@@ -1,0 +1,14 @@
+<div class="row" >
+  <!-- <span *ngFor="let user of users"> -->
+      <div *ngFor="let photo of photos">
+          <span class="ml-2">{{photo.userName}}</span>
+          <div class="card m-2" style="width: 12rem;"  >
+              <img class="card-img-top" [src]="photo.url" alt="photo.userName">
+              <div class="card-body">
+              <button class="btn btn-success mr-2" style="font-size: 12px;" (click)="approvePhoto(photo.userId,photo.photoId)">Approve</button>
+              <button class="btn btn-danger" style="font-size: 12px;" (click)="deletePhoto(photo.userId,photo.photoId)">Reject</button>
+              </div>
+            </div>
+      </div>
+   <!-- </span> -->
+</div>

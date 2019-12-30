@@ -52,17 +52,17 @@ roleMatch(allowedRoles: Array<string>): boolean{
   let isMatch = false
 
   const userRoles = this.decodedToken.role as Array<string>;
-  console.log(userRoles);
-  console.log(allowedRoles) ;
+  // console.log(userRoles);
+  // console.log(allowedRoles) ;
 
   allowedRoles.forEach(element => {
     if (userRoles.includes(element)){
       isMatch = true;
-      console.log('suceeded');
+      // console.log('suceeded');
       return;
     }
   });
-console.log('failed');
+// console.log('failed');
   return isMatch;
 }
 

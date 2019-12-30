@@ -61,7 +61,7 @@ namespace DatingApp.API.Controller
              if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                  return Unauthorized();
 
-                var userFromRepo = await repository.GetUser(userId);
+                var userFromRepo = await repository.GetUserWithUnapprovedPhotos(userId);
 
             // var values = await repository.GetUser(userId);
 
@@ -89,37 +89,81 @@ namespace DatingApp.API.Controller
 
             var photo = mapper.Map<Photo> (photoForCreationDTO);
 
-            if(!userFromRepo.Photos.Any(u => u.IsMain))
-                photo.IsMain = true;
+            photo.IsApproved = false;
+            photo.IsMain = false;
 
-                userFromRepo.Photos.Add(photo);
+            // if(!userFromRepo.Photos.Any(u => u.IsMain))
+                // photo.IsMain = true;
 
+             userFromRepo.Photos.Add(photo);
 
-                if(await repository.SaveAll())
-                {
-                    var photoForReturn = mapper.Map<PhotosForReturnDTO>(photo);
-                    return CreatedAtRoute("GetPhoto", new {userId = userId, id = photo.Id}, photoForReturn );
-                    // return CreatedAtRoute("GetPhoto", new {userId = userId, photo.Id}, photoForReturn );
-                }
-      
+            if(await repository.SaveAll())
+            {
+                var photoForReturn = mapper.Map<PhotosForReturnDTO>(photo);
+                return CreatedAtRoute("GetPhoto", new {userId = userId, id = photo.Id}, photoForReturn );
+                // return CreatedAtRoute("GetPhoto", new {userId = userId, photo.Id}, photoForReturn );
+            }
+    
             return BadRequest("Could not add the photo");
         }
+
+        [HttpPost("{id}/approve")]
+        public async Task<IActionResult> ApprovePhoto(int userId, int id)
+        {
+             
+            var userFromRepo = await repository.GetUserWithUnapprovedPhotos(userId);
+            if(userFromRepo == null)
+                return BadRequest("User not found");
+
+            var moderator = await repository.GetUserWithUnapprovedPhotos(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            var userHasRole = false;
+
+            foreach (var role in moderator.UserRoles)
+            {
+                if(role.RoleId == 2 || role.RoleId == 3){
+                    userHasRole = true;
+                    break;
+                }
+            }
+
+            if (!userHasRole)
+                return BadRequest("Action not Allowed");
+
+            if(!userFromRepo.Photos.Any(p => p.Id == id))
+            return Unauthorized();
+
+             var photoFromRepo = await repository.GetPhoto(id);
+
+            if(!userFromRepo.Photos.Any(u => u.IsMain))
+                 photoFromRepo.IsMain = true;
+
+            photoFromRepo.IsApproved = true;
+
+               if (await repository.SaveAll())
+                return NoContent();
+
+              return BadRequest("Could not set photo to main");
+        }
+
 
         [HttpPost("{id}/setMain")]
         public async Task<IActionResult> SetMainPhoto(int userId, int id)
         {
-             if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+              if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                  return Unauthorized();
 
-                var userFromRepo = await repository.GetUser(userId);
+              var userFromRepo = await repository.GetUserWithUnapprovedPhotos(userId);
             
             if(!userFromRepo.Photos.Any(p => p.Id == id))
                 return Unauthorized();
 
-                var photoFromRepo = await repository.GetPhoto(id);
+             var photoFromRepo = await repository.GetPhoto(id);
 
             if(photoFromRepo.IsMain)
                 return BadRequest("This is already the main photo");
+
+            if (!photoFromRepo.IsApproved)
+                return BadRequest("This photo is awaiting for approval");
 
             var currentMainPhoto = await repository.GetMainPhotoForUser(userFromRepo.Id);
 
@@ -135,10 +179,22 @@ namespace DatingApp.API.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePhoto(int userId, int id)
         {
+            var moderator = await repository.GetUserWithUnapprovedPhotos(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            var userIsModerator = false;
+
+            foreach (var role in moderator.UserRoles)
+            {
+                if(role.RoleId == 2 || role.RoleId == 3){
+                    userIsModerator = true;
+                    break;
+                }
+            }
+    
+            if(!userIsModerator){
              if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                  return Unauthorized();
-
-                var userFromRepo = await repository.GetUser(userId);
+            }
+                var userFromRepo = await repository.GetUserWithUnapprovedPhotos(userId);
             
             if(!userFromRepo.Photos.Any(p => p.Id == id))
                 return Unauthorized();

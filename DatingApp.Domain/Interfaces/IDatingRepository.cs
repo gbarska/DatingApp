@@ -19,5 +19,7 @@ namespace  DatingApp.Domain.Interfaces
          Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
          Task<IEnumerable<Message>> GetMessagesThread(int userId, int recipientId);
          Task<IEnumerable<UserForListWithRolesDTO>> GetUsersWithRoles();
+         Task<User> GetUserWithUnapprovedPhotos(int id);
+        Task<IEnumerable<User>> GetUsersWithUnapprovedPhotos();
     }
 }

@@ -39,6 +39,18 @@ namespace DatingApp.Data.Repositories
 
             return user;
         }
+        public async Task<User> GetUserWithUnapprovedPhotos(int id)
+        {
+            var user = await _context.Users
+            .Include(y => y.UserRoles)
+            .Include(x => x.Photos).IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Id == id);
+            return user;
+        }
+        public async Task<IEnumerable<User>> GetUsersWithUnapprovedPhotos(){
+             var users = await _context.Users.Include(x => x.Photos).IgnoreQueryFilters().ToListAsync();
+             
+            return users;
+        }
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
@@ -105,7 +117,7 @@ namespace DatingApp.Data.Repositories
 
         public async Task<Photo> GetPhoto(int id)
         {
-          var photo = await _context.Photos.FirstOrDefaultAsync( x => x.Id == id);
+          var photo = await _context.Photos.IgnoreQueryFilters().FirstOrDefaultAsync( x => x.Id == id);
           return photo;
         }
 

@@ -10,3 +10,28 @@ img.img-thumbnail{
 input[type=file]{
     color: transparent;
 }
+
+.container-img {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color:#E04242;
+  font-size: 12px;
+  font-weight:bold;
+}
+
+.img-unnaproved{
+opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.photo-approved{
+    display:none;
+}

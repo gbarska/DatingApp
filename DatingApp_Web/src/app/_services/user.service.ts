@@ -89,6 +89,11 @@ deletePhoto(userId: number, id: number){
   return this.http.delete(this.baseUrl + '/'+ userId + '/photos/' + id);
 }
 
+
+approvePhoto(userId: number, id: number){
+  return this.http.post(this.baseUrl + '/' + userId + '/photos/' + id + '/approve',{});
+}
+
 getMessages(id: number, page?, itemsPerPage?, messageContainer?){
   const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
 
@@ -133,6 +138,10 @@ markAsRead(id: number, userId: number){
   console.log('trying to mark message '+ id + 'as read for user '+ userId);
   return this.http.post(this.baseUrl +  '/' + userId + '/messages/' + id + '/read', {})
     .subscribe();
+}
+
+getPhotosForApproval(){
+  return this.http.get(this.baseUrl + '/photosForApproval', {});
 }
 
 }

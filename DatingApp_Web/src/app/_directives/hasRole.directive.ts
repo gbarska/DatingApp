@@ -18,14 +18,11 @@ isVisible = false;
 
     ngOnInit(): void {
       const userRoles = this.authService.decodedToken.role as Array<string>;
-      console.log(userRoles);
-      console.log(this.appHasRole);
-
       if (!userRoles){
         this.viewContainerRef.clear();
       }
 
-      if(this.authService.roleMatch(['Moderator','Admin'])){
+      if(this.authService.roleMatch(this.appHasRole)){
         if(!this.isVisible){
           this.isVisible = true;
           this.viewContainerRef.createEmbeddedView(this.templateRef);

@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using System.Security.Claims;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,15 @@ namespace DatingApp.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> Get(int id)
         {
-            var user = await _repo.GetUser(id);
+            var user = new User();
+
+            var requestUser= int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if(id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+              user = await _repo.GetUserWithUnapprovedPhotos(id);
+            else
+             user = await _repo.GetUser(id);
+
             var userToReturn = _mapper.Map<UserForDetailedDTO>(user);
             return Ok(userToReturn);
         }
@@ -81,6 +90,7 @@ namespace DatingApp.API.Controllers
                 var userFromRepo = await _repo.GetUser(id);
 
                 _mapper.Map(user, userFromRepo);
+
                 if(await _repo.SaveAll())
                     return NoContent();
 
@@ -122,6 +132,43 @@ namespace DatingApp.API.Controllers
                
 
             throw new Exception("Failed to like user");
+        }
+
+        [HttpGet("photosForApproval")]
+        public async Task<IActionResult> GetUsersWithPhotosForApproval()
+        {
+            var moderator = await _repo.GetUserWithUnapprovedPhotos(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            var userHasRole = false;
+
+            foreach (var role in moderator.UserRoles)
+            {
+                if(role.RoleId == 2 || role.RoleId == 3){
+                    userHasRole = true;
+                    break;
+                }
+            }
+
+            if (!userHasRole)
+                return BadRequest("Action not Allowed");
+
+            var usersWithPhotosForApproval = await _repo.GetUsersWithUnapprovedPhotos();
+            
+
+            foreach (var item in usersWithPhotosForApproval)
+            {
+                var photos = item.Photos.Where(y => y.IsApproved == false ).ToList();
+                item.Photos = photos;
+                
+                if (photos.Count <= 0){
+                   usersWithPhotosForApproval = usersWithPhotosForApproval.Where(x => x.Id != item.Id);
+                }
+            }
+
+            var photosForReturn = _mapper.Map<IEnumerable<UserWhithPhotoForApprovalDTO>>(usersWithPhotosForApproval);
+            
+            // _mapper.Map(photosForApproval, photosForReturn);
+
+            return Ok(photosForReturn);
         }
 
 

@@ -38,7 +38,7 @@ namespace DatingApp.API.Controllers
         }
 
         [Authorize(Policy = "RequireAdminRole")]
-        [HttpPost("editRole/{userName}")]
+        [HttpPost("editRoles/{userName}")]
         public async Task<IActionResult> EditRoles(string userName, RoleEditDTO roleEditDTO)
         {
             var user = await _userManager.FindByNameAsync(userName);

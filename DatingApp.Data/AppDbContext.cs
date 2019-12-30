@@ -32,6 +32,8 @@ namespace DatingApp.Data
             modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(127);
             modelBuilder.Entity<User>().Property(u => u.UserName).HasMaxLength(127);
            
+            modelBuilder.Entity<Photo>().HasQueryFilter(p => p.IsApproved);
+
             modelBuilder.Entity<Role>().Property(u => u.NormalizedName).HasMaxLength(127);
             modelBuilder.Entity<Role>().Property(u => u.Name).HasMaxLength(127);
 
